@@ -16,39 +16,18 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
   },
   {
     id: 2,
-    url: PLACEHOLDER_COVER,
-    gallery: [], // Galerie vide
-    title: "Urban Chic",
-    category: "Streetwear",
-    description: "Description à personnaliser...",
+    url: "https://i.imgur.com/OStQU8o.png",
+    gallery: [
+      "https://i.imgur.com/p65Walq.png",
+      "https://i.imgur.com/2uWmgnr.png",
+      "https://i.imgur.com/OBDMp9l.png",
+      "https://i.imgur.com/zs4yolL.png",
+      "https://i.imgur.com/4tNVxlF.png"
+    ],
+    title: "Ocean Drive",
+    category: "Maillots de bain",
+    description: "Clichés réalisé pour la marque de maillots de bain \"Ocean Drive\" à Vice City.",
     rotation: 1
-  },
-  {
-    id: 3,
-    url: PLACEHOLDER_COVER,
-    gallery: [], // Galerie vide
-    title: "Sweet Cherry",
-    category: "Commercial",
-    description: "Description à personnaliser...",
-    rotation: -1
-  },
-  {
-    id: 4,
-    url: PLACEHOLDER_COVER,
-    gallery: [], // Galerie vide
-    title: "Golden Hour",
-    category: "Portrait",
-    description: "Description à personnaliser...",
-    rotation: 3
-  },
-  {
-    id: 5,
-    url: PLACEHOLDER_COVER,
-    gallery: [], // Galerie vide
-    title: "Retro Vibes",
-    category: "Fashion",
-    description: "Description à personnaliser...",
-    rotation: -2
   }
 ];
 

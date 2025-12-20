@@ -5,7 +5,7 @@ import { PORTFOLIO_ITEMS } from '../constants';
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 // Clé de stockage mise à jour pour réinitialiser les données
-const STORAGE_KEY = 'portfolio_data_v2';
+const STORAGE_KEY = 'portfolio_data_v12';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

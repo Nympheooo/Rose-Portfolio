@@ -83,7 +83,11 @@ function App() {
                <div className="max-w-6xl mx-auto py-20 px-8 flex flex-col md:flex-row items-center gap-20 relative z-10 pl-24">
                   <div className="w-full md:w-1/2 relative group">
                        <div className="absolute inset-0 bg-pink-200 transform translate-x-4 translate-y-4 rounded-lg transition-transform group-hover:translate-x-6 group-hover:translate-y-6"></div>
-                       <img src="https://picsum.photos/600/800?random=10" alt="Rose Portrait" className="relative rounded-lg shadow-xl w-full grayscale group-hover:grayscale-0 transition-all duration-700 object-cover h-[600px]" />
+                       <img 
+                          src="https://i.imgur.com/QkaahV8.png" 
+                          alt="Rose Portrait" 
+                          className="relative rounded-lg shadow-xl w-full grayscale group-hover:grayscale-0 transition-all duration-700 object-cover object-center h-[600px]" 
+                       />
                   </div>
                   <div className="w-full md:w-1/2">
                       <span className="text-pink-400 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Bio & Stats</span>
