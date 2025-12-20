@@ -1,70 +1,53 @@
 import React from 'react';
 import { PhotoItem, SocialLink } from "./types";
 
+// Images d'attente (Placeholders) pour la structure initiale
+const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=Shooting";
+
 export const PORTFOLIO_ITEMS: PhotoItem[] = [
   {
     id: 1,
-    url: "https://picsum.photos/600/800?random=1",
-    gallery: [
-        "https://picsum.photos/600/800?random=11",
-        "https://picsum.photos/600/400?random=12",
-        "https://picsum.photos/600/800?random=13"
-    ],
+    url: PLACEHOLDER_COVER,
+    gallery: [], // Galerie vide
     title: "Summer Breeze",
     category: "Editorial",
-    description: "Shooting pour le magazine Vogue, collection été.",
+    description: "Description à personnaliser...",
     rotation: -2
   },
   {
     id: 2,
-    url: "https://picsum.photos/600/800?random=2",
-    gallery: [
-        "https://picsum.photos/600/800?random=21",
-        "https://picsum.photos/600/800?random=22",
-        "https://picsum.photos/600/400?random=23"
-    ],
+    url: PLACEHOLDER_COVER,
+    gallery: [], // Galerie vide
     title: "Urban Chic",
     category: "Streetwear",
-    description: "Campagne publicitaire en centre-ville.",
+    description: "Description à personnaliser...",
     rotation: 1
   },
   {
     id: 3,
-    url: "https://picsum.photos/600/800?random=3",
-    gallery: [
-        "https://picsum.photos/600/400?random=31",
-        "https://picsum.photos/600/800?random=32",
-        "https://picsum.photos/600/800?random=33"
-    ],
+    url: PLACEHOLDER_COVER,
+    gallery: [], // Galerie vide
     title: "Sweet Cherry",
     category: "Commercial",
-    description: "Publicité pour une marque de cosmétiques bio.",
+    description: "Description à personnaliser...",
     rotation: -1
   },
   {
     id: 4,
-    url: "https://picsum.photos/600/800?random=4",
-    gallery: [
-        "https://picsum.photos/600/800?random=41",
-        "https://picsum.photos/600/800?random=42",
-        "https://picsum.photos/600/800?random=43"
-    ],
+    url: PLACEHOLDER_COVER,
+    gallery: [], // Galerie vide
     title: "Golden Hour",
     category: "Portrait",
-    description: "Séance lumière naturelle au coucher du soleil.",
+    description: "Description à personnaliser...",
     rotation: 3
   },
   {
     id: 5,
-    url: "https://picsum.photos/600/800?random=5",
-    gallery: [
-        "https://picsum.photos/600/400?random=51",
-        "https://picsum.photos/600/800?random=52",
-        "https://picsum.photos/600/400?random=53"
-    ],
+    url: PLACEHOLDER_COVER,
+    gallery: [], // Galerie vide
     title: "Retro Vibes",
     category: "Fashion",
-    description: "Inspiration années 60, stylisme vintage.",
+    description: "Description à personnaliser...",
     rotation: -2
   }
 ];

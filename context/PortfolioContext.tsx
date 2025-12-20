@@ -4,13 +4,16 @@ import { PORTFOLIO_ITEMS } from '../constants';
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
+// Clé de stockage mise à jour pour réinitialiser les données
+const STORAGE_KEY = 'portfolio_data_v2';
+
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<PhotoItem[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
   // Chargement initial depuis le LocalStorage ou les constantes
   useEffect(() => {
-    const savedItems = localStorage.getItem('portfolio_items');
+    const savedItems = localStorage.getItem(STORAGE_KEY);
     if (savedItems) {
       setItems(JSON.parse(savedItems));
     } else {
@@ -24,7 +27,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Sauvegarde automatique à chaque modification
   useEffect(() => {
     if (items.length > 0) {
-      localStorage.setItem('portfolio_items', JSON.stringify(items));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     }
   }, [items]);
 
