@@ -1,8 +1,32 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Récupération sécurisée de la clé API selon l'environnement (Vite ou standard)
+// Note: Sur Vercel avec Vite, la variable doit s'appeler VITE_API_KEY
+const getApiKey = () => {
+  try {
+    // @ts-ignore - Support pour Vite
+    if (import.meta.env && import.meta.env.VITE_API_KEY) {
+      // @ts-ignore
+      return import.meta.env.VITE_API_KEY;
+    }
+    // Fallback pour Create React App ou environnements Node
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    console.warn("Erreur lors de la lecture de la clé API");
+  }
+  return '';
+};
+
+const apiKey = getApiKey();
+const ai = new GoogleGenAI({ apiKey });
 
 export const generateDraftReply = async (inquiryText: string, senderName: string): Promise<string> => {
+  if (!apiKey) {
+    return "Configuration manquante : Clé API non trouvée. Veuillez configurer VITE_API_KEY.";
+  }
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
