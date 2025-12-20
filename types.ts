@@ -32,4 +32,8 @@ export interface PortfolioContextType {
   addPhotoToGallery: (id: number, url: string) => void;
   deletePhotoFromGallery: (id: number, index: number) => void;
   reorderGalleryPhoto: (id: number, fromIndex: number, toIndex: number) => void;
+  createGallery: (title: string, category: string, description: string) => void;
+  deleteGallery: (id: number) => void;
+  updateGalleryDetails: (id: number, title: string, category: string, description: string) => void;
+  reorderGalleries: (fromIndex: number, toIndex: number) => void;
 }

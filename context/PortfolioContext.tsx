@@ -6,6 +6,7 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 
 // Clé de stockage mise à jour pour réinitialiser les données
 const STORAGE_KEY = 'portfolio_data_v2';
+const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<PhotoItem[]>([]);
@@ -81,6 +82,46 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }));
   };
 
+  const createGallery = (title: string, category: string, description: string) => {
+    const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+    // Rotation aléatoire entre -3 et 3 degrés pour le style
+    const randomRotation = (Math.random() * 6) - 3; 
+    
+    const newItem: PhotoItem = {
+      id: newId,
+      title,
+      category,
+      description,
+      url: PLACEHOLDER_COVER,
+      gallery: [],
+      rotation: randomRotation
+    };
+
+    setItems(prev => [...prev, newItem]);
+  };
+
+  const deleteGallery = (id: number) => {
+    setItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const updateGalleryDetails = (id: number, title: string, category: string, description: string) => {
+    setItems(prev => prev.map(item => 
+      item.id === id ? { ...item, title, category, description } : item
+    ));
+  };
+
+  const reorderGalleries = (fromIndex: number, toIndex: number) => {
+    setItems(prev => {
+      const newItems = [...prev];
+      if (toIndex < 0 || toIndex >= newItems.length) return prev;
+      
+      const element = newItems[fromIndex];
+      newItems.splice(fromIndex, 1);
+      newItems.splice(toIndex, 0, element);
+      return newItems;
+    });
+  };
+
   return (
     <PortfolioContext.Provider value={{ 
       items, 
@@ -90,7 +131,11 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       updateCoverImage, 
       addPhotoToGallery, 
       deletePhotoFromGallery,
-      reorderGalleryPhoto
+      reorderGalleryPhoto,
+      createGallery,
+      deleteGallery,
+      updateGalleryDetails,
+      reorderGalleries
     }}>
       {children}
     </PortfolioContext.Provider>
