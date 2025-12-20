@@ -71,6 +71,11 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   { 
+    platform: "Email", 
+    url: "mailto:contact@rosek.com", 
+    icon: "@" 
+  },
+  { 
     platform: "Facebrowser", 
     url: "https://facebrowser.gta.world/notanangel", 
     icon: React.createElement("svg", {
@@ -85,10 +90,5 @@ export const SOCIAL_LINKS: SocialLink[] = [
       strokeWidth: 2,
       d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
     }))
-  },
-  { 
-    platform: "Email", 
-    url: "mailto:contact@rosek.com", 
-    icon: "@" 
   }
 ];
