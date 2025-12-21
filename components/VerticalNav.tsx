@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Section } from '../types';
 import { SOCIAL_LINKS } from '../constants';
 import { usePortfolio } from '../context/PortfolioContext';
+import { AdminMessaging } from './AdminMessaging';
 
 export const VerticalNav: React.FC = () => {
   const [activeSection, setActiveSection] = useState<Section>(Section.HOME);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showMessaging, setShowMessaging] = useState(false);
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
   
-  const { login, isAdmin, logout } = usePortfolio();
+  const { login, isAdmin, logout, unreadCount } = usePortfolio();
 
   const scrollToSection = (sectionId: Section) => {
     const element = document.getElementById(sectionId);
@@ -101,6 +103,24 @@ export const VerticalNav: React.FC = () => {
               </span>
             </button>
           ))}
+          
+          {/* Admin Messaging Button */}
+          {isAdmin && (
+             <button
+                onClick={() => setShowMessaging(true)}
+                className="group flex items-center gap-3 focus:outline-none mt-4 animate-in fade-in"
+             >
+                <div className="h-px bg-purple-400 w-4 group-hover:w-8 transition-all" />
+                <span className="text-xs uppercase tracking-[0.2em] text-purple-500 font-bold flex items-center gap-2">
+                    Messagerie
+                    {unreadCount > 0 && (
+                        <span className="bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full">
+                            {unreadCount}
+                        </span>
+                    )}
+                </span>
+             </button>
+          )}
         </div>
 
         {/* Social Icons */}
@@ -119,6 +139,11 @@ export const VerticalNav: React.FC = () => {
           ))}
         </div>
       </nav>
+
+      {/* Modal Messaging Admin */}
+      {showMessaging && (
+        <AdminMessaging onClose={() => setShowMessaging(false)} />
+      )}
 
       {/* Modal Login Admin */}
       {showLoginModal && (

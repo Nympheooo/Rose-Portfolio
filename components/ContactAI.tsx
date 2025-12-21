@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { generateDraftReply } from '../services/geminiService';
+import { usePortfolio } from '../context/PortfolioContext';
 
 export const ContactAI: React.FC = () => {
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
+  
   const [aiDraft, setAiDraft] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const { sendMessage } = usePortfolio();
 
   const handleSimulateResponse = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,10 +25,17 @@ export const ContactAI: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Envoi du message via le contexte (stockage DB locale)
+    sendMessage(name, phone, message);
+
     setSubmitted(true);
+    
+    // Reset du formulaire
     setTimeout(() => {
         setSubmitted(false);
         setName('');
+        setPhone('');
         setMessage('');
         setAiDraft('');
     }, 3000);
@@ -42,31 +54,42 @@ export const ContactAI: React.FC = () => {
         {submitted ? (
              <div className="bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl text-center animate-pulse">
                 <p className="font-bold text-xl mb-2">Message Envoyé ! 💌</p>
-                <p>Merci {name}, Rose vous répondra très vite.</p>
+                <p>Merci {name}, votre message a bien été transmis à Rose.</p>
              </div>
         ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Votre Nom</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Nom et Prénom</label>
                 <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
-                placeholder="Directeur de casting..."
-                required
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    placeholder="Votre identité..."
+                    required
+                />
+            </div>
+
+            <div>
+                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Numéro de téléphone</label>
+                <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    placeholder="06..."
                 />
             </div>
 
             <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Votre Message</label>
                 <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
-                placeholder="Détails du shooting, dates, inspiration..."
-                required
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    placeholder="Détails du shooting, dates, inspiration..."
+                    required
                 />
             </div>
 

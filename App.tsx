@@ -91,28 +91,34 @@ function App() {
                   </div>
                   <div className="w-full md:w-1/2">
                       <span className="text-pink-400 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Bio & Stats</span>
-                      <h2 className="text-6xl font-display text-pink-900 mb-8 leading-tight">Hello, c'est <br/><span className="text-pink-500 italic">Rose</span></h2>
+                      <h2 className="text-6xl font-display text-pink-900 mb-8 leading-tight">Hello, moi c'est <br/><span className="text-pink-500 italic">Rose</span></h2>
                       <p className="font-serif text-lg text-gray-600 leading-loose mb-10 text-justify">
-                          Passionnée par l'art visuel et la mode vintage, je parcours le monde à la recherche de la lumière parfaite. 
-                          Mon style allie l'élégance du cinéma classique américain à la fraîcheur de la mode contemporaine. 
-                          Je suis disponible pour des projets éditoriaux, commerciaux et artistiques.
+                          Passionné par l’art de la photographie, je mets mon image au service de projets visuels. Attentive à la lumière, aux émotions et à l’attitude, j’incarne des univers variés, du classique à l’artistique. Disponible pour projets éditoriaux, commerciaux et créatifs.
                       </p>
                       <div className="grid grid-cols-2 gap-8 border-t border-pink-100 pt-8">
                           <div>
+                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Âge</p>
+                              <p className="font-display text-2xl text-pink-900">23 ans</p>
+                          </div>
+                          <div>
                               <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Hauteur</p>
-                              <p className="font-display text-2xl text-pink-900">1m75</p>
+                              <p className="font-display text-2xl text-pink-900">1m66</p>
+                          </div>
+                          <div>
+                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Poids</p>
+                              <p className="font-display text-2xl text-pink-900">56 kg</p>
                           </div>
                           <div>
                               <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Yeux</p>
-                              <p className="font-display text-2xl text-pink-900">Noisette</p>
+                              <p className="font-display text-2xl text-pink-900">Bleu clair</p>
                           </div>
                           <div>
                               <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Cheveux</p>
-                              <p className="font-display text-2xl text-pink-900">Bruns</p>
+                              <p className="font-display text-2xl text-pink-900">Blanc</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Base</p>
-                              <p className="font-display text-2xl text-pink-900">Paris, FR</p>
+                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Origine</p>
+                              <p className="font-display text-2xl text-pink-900">Vice City, USA</p>
                           </div>
                       </div>
                   </div>

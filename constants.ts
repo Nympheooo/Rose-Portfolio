@@ -7,20 +7,24 @@ const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=Shoot
 export const PORTFOLIO_ITEMS: PhotoItem[] = [
   {
     id: 1,
-    url: PLACEHOLDER_COVER,
-    gallery: [], // Galerie vide
-    title: "Summer Breeze",
-    category: "Editorial",
-    description: "Description à personnaliser...",
+    url: "https://i.imgur.com/ymBKlMf.png",
+    gallery: [
+      "https://i.imgur.com/SXILnuZ.png",
+      "https://i.imgur.com/PktDUQg.png",
+      "https://i.imgur.com/tVetvEZ.png"
+    ],
+    title: "Bigness",
+    category: "Streetwear",
+    description: "Clichés promotionnels d'une nouvelle collection pour la marque streetwear BIGNESS. Le shooting a eu lieu dans les rues de Liberty City",
     rotation: -2
   },
   {
     id: 2,
     url: "https://i.imgur.com/OStQU8o.png",
     gallery: [
-      "https://i.imgur.com/p65Walq.png",
+      "https://i.imgur.com/uY5kWa1.png",
       "https://i.imgur.com/2uWmgnr.png",
-      "https://i.imgur.com/OBDMp9l.png",
+      "https://i.imgur.com/3e9tb9H.png",
       "https://i.imgur.com/zs4yolL.png",
       "https://i.imgur.com/4tNVxlF.png"
     ],

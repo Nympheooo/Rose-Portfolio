@@ -10,6 +10,15 @@ export interface PhotoItem {
   rotation: number;
 }
 
+export interface ContactMessage {
+  id: string;
+  name: string;
+  phone: string;
+  content: string;
+  date: string; // ISO String
+  read: boolean;
+}
+
 export enum Section {
   HOME = 'home',
   GALLERY = 'gallery',
@@ -26,6 +35,8 @@ export interface SocialLink {
 export interface PortfolioContextType {
   items: PhotoItem[];
   isAdmin: boolean;
+  messages: ContactMessage[]; // Liste des messages
+  unreadCount: number;
   login: (password: string) => boolean;
   logout: () => void;
   updateCoverImage: (id: number, url: string) => void;
@@ -36,4 +47,8 @@ export interface PortfolioContextType {
   deleteGallery: (id: number) => void;
   updateGalleryDetails: (id: number, title: string, category: string, description: string) => void;
   reorderGalleries: (fromIndex: number, toIndex: number) => void;
+  // Méthodes de messagerie
+  sendMessage: (name: string, phone: string, content: string) => void;
+  markMessageAsRead: (id: string) => void;
+  deleteMessage: (id: string) => void;
 }
