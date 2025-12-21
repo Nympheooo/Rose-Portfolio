@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { generateDraftReply } from '../services/geminiService';
 import { usePortfolio } from '../context/PortfolioContext';
 import emailjs from '@emailjs/browser';
 
@@ -8,8 +7,6 @@ export const ContactAI: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   
-  const [aiDraft, setAiDraft] = useState('');
-  const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -18,41 +15,29 @@ export const ContactAI: React.FC = () => {
 
   const { sendMessage } = usePortfolio();
 
-  const handleSimulateResponse = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!message || !name) return;
-    
-    setLoading(true);
-    const draft = await generateDraftReply(message, name);
-    setAiDraft(draft);
-    setLoading(false);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
     setError('');
     
-    // 1. Sauvegarde locale (pour l'UI immédiate et l'admin panel local)
+    // 1. Sauvegarde locale
     sendMessage(name, phone, message);
 
     try {
-        // 2. Envoi réel par email via EmailJS avec vos clés configurées
-        const SERVICE_ID = 'service_9vvvv5j';
-        const TEMPLATE_ID = 'template_o27cxgc';
-        const PUBLIC_KEY = 'QpKVW_IuGhmYvFrUB';
-
         if (formRef.current) {
             const templateParams = {
                 from_name: name,
                 from_phone: phone,
                 message: message,
                 to_name: 'Rose K.',
-                // Comme il n'y a pas de champ email obligatoire dans le formulaire actuel,
-                // on met une valeur par défaut ou on pourrait ajouter un champ email au formulaire plus tard.
                 reply_to: 'email_du_visiteur@example.com' 
             };
             
+            // Configuration EmailJS (Hardcoded)
+            const SERVICE_ID = 'service_o5hrvog';
+            const TEMPLATE_ID = 'template_o27cxgc';
+            const PUBLIC_KEY = 'QpKVW_IuGhmYvFrUB';
+
             await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
         }
 
@@ -64,12 +49,23 @@ export const ContactAI: React.FC = () => {
             setName('');
             setPhone('');
             setMessage('');
-            setAiDraft('');
         }, 5000);
 
-    } catch (err) {
-        console.error("Erreur lors de l'envoi email:", err);
-        setError("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+    } catch (err: any) {
+        console.error("❌ Erreur EmailJS:", err);
+        
+        let errorMessage = "Une erreur est survenue.";
+        if (err.text) {
+            errorMessage = `Erreur EmailJS: ${err.text}`;
+        } else if (err.message) {
+             errorMessage = `Erreur: ${err.message}`;
+        }
+
+        if (errorMessage.toLowerCase().includes("network") || errorMessage.toLowerCase().includes("failed to fetch")) {
+            errorMessage = "Erreur réseau : Vérifiez votre connexion ou désactivez AdBlock.";
+        }
+        
+        setError(errorMessage);
     } finally {
         setSending(false);
     }
@@ -130,34 +126,10 @@ export const ContactAI: React.FC = () => {
                     required
                 />
             </div>
-
-            {/* AI Assistant Feature */}
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-xl border border-pink-100">
-                <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold text-purple-500 uppercase flex items-center gap-1">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        Assistant IA de Rose
-                    </span>
-                    <button 
-                        type="button"
-                        onClick={handleSimulateResponse}
-                        disabled={!message || loading || sending}
-                        className="text-xs underline text-pink-600 hover:text-pink-800 disabled:opacity-50"
-                    >
-                        {loading ? 'Réflexion...' : 'Prévisualiser la réponse auto'}
-                    </button>
-                </div>
-                
-                {aiDraft && (
-                    <div className="bg-white p-3 rounded border border-gray-100 text-sm text-gray-600 italic font-serif leading-relaxed">
-                        "{aiDraft}"
-                    </div>
-                )}
-            </div>
             
             {error && (
-                <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
-                    {error}
+                <div className="text-red-600 text-sm font-bold text-center bg-red-50 p-4 rounded border border-red-200 animate-pulse">
+                    ⚠️ {error}
                 </div>
             )}
 
