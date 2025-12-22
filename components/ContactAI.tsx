@@ -5,6 +5,7 @@ export const ContactAI: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // ---------------------------------------------------------
   // CONFIGURATION
@@ -25,6 +26,13 @@ export const ContactAI: React.FC = () => {
     setMessage('');
   };
 
+  const handleCopy = () => {
+      navigator.clipboard.writeText('24717584').then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+      });
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto bg-white p-8 md:p-12 shadow-2xl rounded-3xl border-4 border-pink-100 relative overflow-hidden">
         {/* Background Decorative Elements */}
@@ -32,6 +40,42 @@ export const ContactAI: React.FC = () => {
         <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
 
       <div className="relative z-10">
+        
+        {/* BANDEAU WORK IN PROGRESS */}
+        <div className="bg-gradient-to-r from-pink-50 to-white border border-pink-200 rounded-2xl p-6 mb-10 shadow-sm text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-300 via-purple-300 to-pink-300"></div>
+            
+            <h3 className="font-display text-2xl text-pink-900 mb-3 uppercase tracking-widest">Work in Progress</h3>
+            
+            <div className="text-gray-600 font-serif leading-relaxed space-y-2">
+                <p>
+                    Contactez moi sur <a href="https://facebrowser.gta.world/notanangel" target="_blank" rel="noreferrer" className="text-red-500 font-bold hover:text-red-600 hover:underline decoration-red-300 underline-offset-2 transition-all">Facebrowser</a>
+                </p>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-2">
+                    <span>ou par message au</span>
+                    <div className="inline-flex items-center gap-3 bg-white px-4 py-1.5 rounded-full border border-pink-100 shadow-sm group hover:border-pink-300 transition-colors">
+                        <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        <span className="font-mono font-bold text-gray-800 tracking-wider">24717584</span>
+                        <div className="w-px h-4 bg-gray-200"></div>
+                        <button 
+                            onClick={handleCopy}
+                            className="text-[10px] uppercase font-bold text-gray-400 hover:text-pink-600 transition-colors focus:outline-none"
+                            title="Copier le numéro"
+                        >
+                            {copied ? (
+                                <span className="text-green-500 flex items-center animate-in fade-in slide-in-from-left-1">
+                                    Copié
+                                    <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                </span>
+                            ) : (
+                                "Copier"
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2 className="text-4xl font-display text-center text-pink-900 mb-2">Travaillons Ensemble</h2>
         <p className="text-center text-gray-500 font-serif italic mb-8">Parlez-moi de votre projet ✨</p>
 
@@ -110,13 +154,6 @@ export const ContactAI: React.FC = () => {
                 <span>Envoyer le message</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
-
-            {/* Lien de secours */}
-            <div className="text-center mt-4">
-                <a href={`mailto:${DESTINATION_EMAIL}`} className="text-[10px] text-gray-400 hover:text-pink-500 uppercase tracking-widest border-b border-transparent hover:border-pink-300 transition-all pb-0.5">
-                    Problème d'envoi ? Cliquez ici pour m'écrire directement
-                </a>
-            </div>
             </form>
         )}
       </div>
