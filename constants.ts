@@ -22,7 +22,6 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
     id: 2,
     url: "https://i.imgur.com/OStQU8o.png",
     gallery: [
-      "https://i.imgur.com/uY5kWa1.png",
       "https://i.imgur.com/2uWmgnr.png",
       "https://i.imgur.com/3e9tb9H.png",
       "https://i.imgur.com/zs4yolL.png",

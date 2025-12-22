@@ -5,8 +5,8 @@ import { PORTFOLIO_ITEMS } from '../constants';
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 // Clés de stockage
-// Mise à jour vers v18 pour inclure l'image ajoutée
-const STORAGE_KEY_PORTFOLIO = 'portfolio_data_v18';
+// Mise à jour vers v19 pour refléter la suppression de l'image
+const STORAGE_KEY_PORTFOLIO = 'portfolio_data_v19';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
