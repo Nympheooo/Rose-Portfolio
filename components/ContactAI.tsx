@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
 
 export const ContactAI: React.FC = () => {
   const [name, setName] = useState('');
@@ -13,12 +12,9 @@ export const ContactAI: React.FC = () => {
   const DESTINATION_EMAIL = 'nymphe.jdr@gmail.com'; 
   // ---------------------------------------------------------
 
-  const { sendMessage } = usePortfolio();
-
   const handleSubmit = (e: React.FormEvent) => {
     // On laisse le formulaire s'envoyer naturellement vers FormSubmit (target="_blank")
-    // On enregistre juste en local pour l'admin
-    sendMessage(name, phone, message);
+    // Pas d'enregistrement local
     setSubmitted(true);
   };
 

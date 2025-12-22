@@ -1,21 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { PhotoItem, PortfolioContextType, ContactMessage } from '../types';
+import { PhotoItem, PortfolioContextType } from '../types';
 import { PORTFOLIO_ITEMS } from '../constants';
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 // Clés de stockage
 const STORAGE_KEY_PORTFOLIO = 'portfolio_data_v16';
-const STORAGE_KEY_MESSAGES = 'portfolio_messages_v1';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // État Portfolio
   const [items, setItems] = useState<PhotoItem[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  
-  // État Messagerie
-  const [messages, setMessages] = useState<ContactMessage[]>([]);
 
   // Chargement initial
   useEffect(() => {
@@ -25,12 +21,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setItems(JSON.parse(savedItems));
     } else {
       setItems(PORTFOLIO_ITEMS);
-    }
-
-    // Charger les Messages
-    const savedMessages = localStorage.getItem(STORAGE_KEY_MESSAGES);
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
     }
     
     setIsAdmin(false);
@@ -42,11 +32,6 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(items));
     }
   }, [items]);
-
-  // Sauvegarde automatique des Messages
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(messages));
-  }, [messages]);
 
   // --- Auth ---
   const login = (password: string): boolean => {
@@ -131,38 +116,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     });
   };
 
-  // --- Messaging Actions ---
-  const sendMessage = (name: string, phone: string, content: string) => {
-    const newMessage: ContactMessage = {
-      id: Date.now().toString(), // Simple ID based on timestamp
-      name,
-      phone,
-      content,
-      date: new Date().toISOString(),
-      read: false
-    };
-    // Ajout au début de la liste
-    setMessages(prev => [newMessage, ...prev]);
-  };
-
-  const markMessageAsRead = (id: string) => {
-    setMessages(prev => prev.map(msg => 
-      msg.id === id ? { ...msg, read: true } : msg
-    ));
-  };
-
-  const deleteMessage = (id: string) => {
-    setMessages(prev => prev.filter(msg => msg.id !== id));
-  };
-
-  const unreadCount = messages.filter(m => !m.read).length;
-
   return (
     <PortfolioContext.Provider value={{ 
       items, 
       isAdmin, 
-      messages,
-      unreadCount,
       login, 
       logout, 
       updateCoverImage, 
@@ -172,10 +129,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       createGallery,
       deleteGallery,
       updateGalleryDetails,
-      reorderGalleries,
-      sendMessage,
-      markMessageAsRead,
-      deleteMessage
+      reorderGalleries
     }}>
       {children}
     </PortfolioContext.Provider>

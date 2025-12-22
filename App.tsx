@@ -93,7 +93,7 @@ function App() {
                       <span className="text-pink-400 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Bio & Stats</span>
                       <h2 className="text-6xl font-display text-pink-900 mb-8 leading-tight">Hello, moi c'est <br/><span className="text-pink-500 italic">Rose</span></h2>
                       <p className="font-serif text-lg text-gray-600 leading-loose mb-10 text-justify">
-                          Passionné par l’art de la photographie, je mets mon image au service de projets visuels. Attentive à la lumière, aux émotions et à l’attitude, j’incarne des univers variés, du classique à l’artistique. Disponible pour projets éditoriaux, commerciaux et créatifs.
+                           Passionnée par l'art de la photographie, je mets mon image au service de projets visuels comme les marques ou des projets purement artistique. Mon univers se teinte d'émotions fortes et de douceur. Je suis disponible pour vos projets éditoriaux, commerciaux et créatifs.
                       </p>
                       <div className="grid grid-cols-2 gap-8 border-t border-pink-100 pt-8">
                           <div>
