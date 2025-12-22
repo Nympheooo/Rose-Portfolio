@@ -26,7 +26,8 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
       "https://i.imgur.com/2uWmgnr.png",
       "https://i.imgur.com/3e9tb9H.png",
       "https://i.imgur.com/zs4yolL.png",
-      "https://i.imgur.com/4tNVxlF.png"
+      "https://i.imgur.com/4tNVxlF.png",
+      "https://i.imgur.com/lbyZ2Ur.png"
     ],
     title: "Ocean Drive",
     category: "Maillots de bain",
