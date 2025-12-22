@@ -5,7 +5,8 @@ import { PORTFOLIO_ITEMS } from '../constants';
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 // Clés de stockage
-const STORAGE_KEY_PORTFOLIO = 'portfolio_data_v16';
+// Mise à jour vers v17 pour nettoyer le cache contenant l'image cassée
+const STORAGE_KEY_PORTFOLIO = 'portfolio_data_v17';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
