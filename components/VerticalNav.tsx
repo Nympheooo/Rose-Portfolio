@@ -124,19 +124,29 @@ export const VerticalNav: React.FC = () => {
         </div>
 
         {/* Social Icons */}
-        <div className="flex gap-4 pointer-events-auto">
-          {SOCIAL_LINKS.map((link) => (
-            <a
-              key={link.platform}
-              href={link.url}
-              onClick={(e) => handleSocialClick(e, link)}
-              className={`text-gray-300 hover:text-pink-500 transition-colors transform hover:-translate-y-1 ${link.platform === 'Facebrowser' && isAdmin ? 'text-pink-500' : ''}`}
-            >
-              <span className={`text-[10px] font-bold border rounded-full w-8 h-8 flex items-center justify-center hover:bg-pink-50 ${link.platform === 'Facebrowser' && isAdmin ? 'border-pink-500 bg-pink-50' : 'border-pink-200'}`}>
-                  {link.icon}
-              </span>
-            </a>
-          ))}
+        <div className="flex gap-4 pointer-events-auto items-end">
+          {SOCIAL_LINKS.map((link) => {
+             const isFacebrowserText = link.icon === "@Facebrowser";
+             
+             return (
+                <a
+                  key={link.platform}
+                  href={link.url}
+                  onClick={(e) => handleSocialClick(e, link)}
+                  className={`transition-colors transform hover:-translate-y-1 
+                    ${isFacebrowserText ? 'text-red-500 hover:text-red-600' : 'text-gray-300 hover:text-pink-500'} 
+                    ${link.platform === 'Facebrowser' && isAdmin && !isFacebrowserText ? 'text-pink-500' : ''}`
+                  }
+                >
+                  <span className={`text-[10px] font-bold border rounded-full h-8 flex items-center justify-center transition-all
+                      ${isFacebrowserText ? 'w-auto px-3 border-red-200 bg-red-50' : 'w-8 border-pink-200 hover:bg-pink-50'}
+                      ${!isFacebrowserText && link.platform === 'Facebrowser' && isAdmin ? 'border-pink-500 bg-pink-50' : ''}
+                  `}>
+                      {link.icon}
+                  </span>
+                </a>
+             );
+          })}
         </div>
       </nav>
 

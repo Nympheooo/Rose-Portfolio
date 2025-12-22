@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import emailjs from '@emailjs/browser';
 
 export const ContactAI: React.FC = () => {
   const [name, setName] = useState('');
@@ -11,7 +10,13 @@ export const ContactAI: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
 
-  const formRef = useRef<HTMLFormElement>(null);
+  // ---------------------------------------------------------
+  // CONFIGURATION FACILE
+  // Remplacez simplement l'email ci-dessous par le vôtre.
+  // Lors du premier envoi, vous recevrez un mail pour "Activer" le formulaire.
+  // ---------------------------------------------------------
+  const DESTINATION_EMAIL = 'votre_email@exemple.com'; 
+  // ---------------------------------------------------------
 
   const { sendMessage } = usePortfolio();
 
@@ -20,52 +25,47 @@ export const ContactAI: React.FC = () => {
     setSending(true);
     setError('');
     
-    // 1. Sauvegarde locale
+    // 1. Sauvegarde locale (pour l'admin dashboard)
     sendMessage(name, phone, message);
 
     try {
-        if (formRef.current) {
-            const templateParams = {
-                from_name: name,
-                from_phone: phone,
+        // 2. Envoi via FormSubmit.co (Alternative robuste à EmailJS)
+        // Pas de librairie requise, juste un appel standard.
+        const response = await fetch(`https://formsubmit.co/ajax/${DESTINATION_EMAIL}`, {
+            method: "POST",
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                phone: phone,
                 message: message,
-                to_name: 'Rose K.',
-                reply_to: 'email_du_visiteur@example.com' 
-            };
-            
-            // Configuration EmailJS (Hardcoded)
-            const SERVICE_ID = 'service_o5hrvog';
-            const TEMPLATE_ID = 'template_o27cxgc';
-            const PUBLIC_KEY = 'QpKVW_IuGhmYvFrUB';
+                _subject: `Nouveau contact Portfolio de ${name}`, // Sujet du mail
+                _template: "table", // Format du mail plus joli
+                _captcha: "false"   // Désactive le captcha google (optionnel)
+            })
+        });
 
-            await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+        const data = await response.json();
+
+        if (response.ok) {
+            setSubmitted(true);
+            // Reset du formulaire
+            setTimeout(() => {
+                setSubmitted(false);
+                setName('');
+                setPhone('');
+                setMessage('');
+            }, 5000);
+        } else {
+            // En cas d'erreur renvoyée par le service
+            throw new Error(data.message || "Erreur lors de l'envoi");
         }
-
-        setSubmitted(true);
-        
-        // Reset du formulaire
-        setTimeout(() => {
-            setSubmitted(false);
-            setName('');
-            setPhone('');
-            setMessage('');
-        }, 5000);
 
     } catch (err: any) {
-        console.error("❌ Erreur EmailJS:", err);
-        
-        let errorMessage = "Une erreur est survenue.";
-        if (err.text) {
-            errorMessage = `Erreur EmailJS: ${err.text}`;
-        } else if (err.message) {
-             errorMessage = `Erreur: ${err.message}`;
-        }
-
-        if (errorMessage.toLowerCase().includes("network") || errorMessage.toLowerCase().includes("failed to fetch")) {
-            errorMessage = "Erreur réseau : Vérifiez votre connexion ou désactivez AdBlock.";
-        }
-        
-        setError(errorMessage);
+        console.error("❌ Erreur d'envoi:", err);
+        setError("Impossible d'envoyer le message pour le moment. Réessayez plus tard.");
     } finally {
         setSending(false);
     }
@@ -84,16 +84,16 @@ export const ContactAI: React.FC = () => {
         {submitted ? (
              <div className="bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl text-center animate-in fade-in zoom-in">
                 <p className="font-bold text-xl mb-2">Message Envoyé ! 💌</p>
-                <p>Merci {name}, votre message a bien été transmis à Rose.</p>
+                <p>Merci {name}, votre message a bien été transmis.</p>
                 <p className="text-xs mt-4 text-green-600 opacity-70">Je vous répondrai très vite !</p>
              </div>
         ) : (
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
             <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Nom et Prénom</label>
                 <input
                     type="text"
-                    name="from_name"
+                    name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
@@ -106,7 +106,7 @@ export const ContactAI: React.FC = () => {
                 <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Numéro de téléphone</label>
                 <input
                     type="tel"
-                    name="from_phone"
+                    name="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
