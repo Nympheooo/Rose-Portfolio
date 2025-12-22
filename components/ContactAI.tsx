@@ -1,74 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 export const ContactAI: React.FC = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
-  
-  const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
 
   // ---------------------------------------------------------
-  // CONFIGURATION FACILE
-  // Remplacez simplement l'email ci-dessous par le vôtre.
-  // Lors du premier envoi, vous recevrez un mail pour "Activer" le formulaire.
+  // CONFIGURATION
   // ---------------------------------------------------------
-  const DESTINATION_EMAIL = 'votre_email@exemple.com'; 
+  const DESTINATION_EMAIL = 'nymphe.jdr@gmail.com'; 
   // ---------------------------------------------------------
 
   const { sendMessage } = usePortfolio();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    setError('');
-    
-    // 1. Sauvegarde locale (pour l'admin dashboard)
+  const handleSubmit = (e: React.FormEvent) => {
+    // On laisse le formulaire s'envoyer naturellement vers FormSubmit (target="_blank")
+    // On enregistre juste en local pour l'admin
     sendMessage(name, phone, message);
+    setSubmitted(true);
+  };
 
-    try {
-        // 2. Envoi via FormSubmit.co (Alternative robuste à EmailJS)
-        // Pas de librairie requise, juste un appel standard.
-        const response = await fetch(`https://formsubmit.co/ajax/${DESTINATION_EMAIL}`, {
-            method: "POST",
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                name: name,
-                phone: phone,
-                message: message,
-                _subject: `Nouveau contact Portfolio de ${name}`, // Sujet du mail
-                _template: "table", // Format du mail plus joli
-                _captcha: "false"   // Désactive le captcha google (optionnel)
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            setSubmitted(true);
-            // Reset du formulaire
-            setTimeout(() => {
-                setSubmitted(false);
-                setName('');
-                setPhone('');
-                setMessage('');
-            }, 5000);
-        } else {
-            // En cas d'erreur renvoyée par le service
-            throw new Error(data.message || "Erreur lors de l'envoi");
-        }
-
-    } catch (err: any) {
-        console.error("❌ Erreur d'envoi:", err);
-        setError("Impossible d'envoyer le message pour le moment. Réessayez plus tard.");
-    } finally {
-        setSending(false);
-    }
+  const handleReset = () => {
+    setSubmitted(false);
+    setName('');
+    setPhone('');
+    setMessage('');
   };
 
   return (
@@ -82,74 +40,87 @@ export const ContactAI: React.FC = () => {
         <p className="text-center text-gray-500 font-serif italic mb-8">Parlez-moi de votre projet ✨</p>
 
         {submitted ? (
-             <div className="bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl text-center animate-in fade-in zoom-in">
-                <p className="font-bold text-xl mb-2">Message Envoyé ! 💌</p>
-                <p>Merci {name}, votre message a bien été transmis.</p>
-                <p className="text-xs mt-4 text-green-600 opacity-70">Je vous répondrai très vite !</p>
+             <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-xl text-center animate-in fade-in zoom-in duration-500">
+                <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <p className="font-display text-2xl mb-2">Validation requise</p>
+                
+                <p className="text-xs mt-6 text-green-600 opacity-70 uppercase tracking-widest">Une fois validé, je vous recontacterai sous peu.</p>
+                
+                <button 
+                    onClick={handleReset}
+                    className="mt-8 px-6 py-3 bg-white border border-green-200 text-green-700 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-green-50 hover:shadow-md transition-all duration-300"
+                >
+                    J'ai une autre demande
+                </button>
              </div>
         ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form 
+                action={`https://formsubmit.co/${DESTINATION_EMAIL}`} 
+                method="POST" 
+                target="_blank"
+                onSubmit={handleSubmit} 
+                className="space-y-5"
+            >
+            {/* Configuration FormSubmit */}
+            <input type="hidden" name="_subject" value={`Portfolio: Nouveau message de ${name}`} />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="true" /> {/* Force le captcha pour garantir l'envoi */}
+            <input type="text" name="_honey" style={{display: 'none'}} />
+
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Nom et Prénom</label>
+                <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Nom complet</label>
                 <input
                     type="text"
                     name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    className="w-full px-4 py-3 bg-pink-50/50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition-colors font-serif text-gray-800"
                     placeholder="Votre identité..."
                     required
                 />
             </div>
 
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Numéro de téléphone</label>
+                <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Téléphone (Optionnel)</label>
                 <input
                     type="tel"
                     name="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    className="w-full px-4 py-3 bg-pink-50/50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition-colors font-serif text-gray-800"
                     placeholder="06..."
                 />
             </div>
 
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1 uppercase tracking-wider">Votre Message</label>
+                <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Votre Message</label>
                 <textarea
                     name="message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-3 bg-pink-50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 font-serif"
+                    className="w-full px-4 py-3 bg-pink-50/50 border border-pink-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition-colors font-serif text-gray-800"
                     placeholder="Détails du shooting, dates, inspiration..."
                     required
                 />
             </div>
             
-            {error && (
-                <div className="text-red-600 text-sm font-bold text-center bg-red-50 p-4 rounded border border-red-200 animate-pulse">
-                    ⚠️ {error}
-                </div>
-            )}
-
             <button
                 type="submit"
-                disabled={sending}
-                className="w-full bg-pink-500 text-white font-bold py-4 rounded-full shadow-lg hover:bg-pink-600 transform hover:-translate-y-1 transition-all duration-300 uppercase tracking-widest text-sm flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-pink-500 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-pink-600 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 uppercase tracking-widest text-sm flex justify-center items-center gap-3"
             >
-                {sending ? (
-                    <>
-                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Envoi en cours...
-                    </>
-                ) : (
-                    'Envoyer le message'
-                )}
+                <span>Envoyer le message</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
+
+            {/* Lien de secours */}
+            <div className="text-center mt-4">
+                <a href={`mailto:${DESTINATION_EMAIL}`} className="text-[10px] text-gray-400 hover:text-pink-500 uppercase tracking-widest border-b border-transparent hover:border-pink-300 transition-all pb-0.5">
+                    Problème d'envoi ? Cliquez ici pour m'écrire directement
+                </a>
+            </div>
             </form>
         )}
       </div>
