@@ -119,7 +119,7 @@ const AppContent = () => {
                       <p className={`font-serif text-lg leading-loose mb-10 text-justify ${isAdmin ? 'text-gray-300' : 'text-gray-600'}`}>
                            {isAdmin 
                             ? "Ici résident les projets que la lumière du jour n'atteint pas. Une exploration de l'ombre, de l'anonymat et de l'esthétique brute. Cet espace est réservé aux collaborations exclusives et expérimentales." 
-                            : "Passionnée par l'art de la photographie, je mets mon image au service de projets visuels comme les marques ou des projets purement artistique. Mon univers se teinte d'émotions fortes et de douceur. Je suis disponible pour vos projets éditoriaux, commerciaux et créatifs."}
+                            : "Passionnée par l'art de la photographie, je mets mon image au service de projets visuels comme les marques ou les projets purement artistique. Mon univers se teinte d'émotions et d'élégance candide."}
                       </p>
                       <div className={`grid grid-cols-2 gap-8 border-t pt-8 ${isAdmin ? 'border-gray-800' : 'border-pink-100'}`}>
                           <div>
