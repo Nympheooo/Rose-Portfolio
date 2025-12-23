@@ -3,15 +3,39 @@ import { VerticalNav } from './components/VerticalNav';
 import { FilmStrip } from './components/FilmStrip';
 import { ContactAI } from './components/ContactAI';
 import { Section } from './types';
-import { PortfolioProvider } from './context/PortfolioContext';
+import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 
-function App() {
+// Composant interne pour utiliser le contexte
+const AppContent = () => {
+  const { isAdmin } = usePortfolio();
+
+  // Classes dynamiques selon le mode (Public = Pink/White, Admin/Secret = Dark/Slate)
+  const theme = {
+    bgMain: isAdmin ? "bg-slate-900 selection:bg-purple-500 selection:text-white" : "bg-white selection:bg-pink-200 selection:text-pink-900",
+    textMain: isAdmin ? "text-gray-100" : "text-gray-800",
+    homeGradient: isAdmin 
+        ? "bg-gradient-to-b from-slate-900 via-slate-800 to-black" 
+        : "bg-gradient-to-b from-pink-200 via-pink-50 to-white",
+    galleryBg: isAdmin ? "bg-black" : "bg-white",
+    aboutBg: isAdmin ? "bg-slate-900" : "bg-white",
+    contactGradient: isAdmin
+        ? "bg-gradient-to-b from-slate-900 via-purple-900/20 to-black"
+        : "bg-gradient-to-b from-white via-pink-50 to-pink-200",
+    textAccent: isAdmin ? "text-purple-400" : "text-pink-500",
+    textStroke: isAdmin ? "text-stroke-purple" : "text-stroke-pink",
+    blobColor: isAdmin ? "bg-purple-900/30" : "bg-pink-50",
+    titleColor: isAdmin ? "text-white" : "text-pink-900"
+  };
+
   return (
-    <PortfolioProvider>
-      <div className="min-h-screen text-gray-800 selection:bg-pink-200 selection:text-pink-900">
+      <div className={`min-h-screen transition-colors duration-700 ${theme.bgMain} ${theme.textMain}`}>
         <style>{`
           .text-stroke-pink {
             -webkit-text-stroke: 2px #ec4899;
+            color: transparent;
+          }
+          .text-stroke-purple {
+            -webkit-text-stroke: 2px #a855f7;
             color: transparent;
           }
           html {
@@ -43,101 +67,119 @@ function App() {
         {/* Main Content - Full Width stacked sections */}
         <main className="w-full relative">
           
-          {/* SECTION 1: HOME - Dégradé Sweet Pink vers Blanc */}
-          <section id={Section.HOME} className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-pink-200 via-pink-50 to-white">
+          {/* SECTION 1: HOME */}
+          <section id={Section.HOME} className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-colors duration-700 ${theme.homeGradient}`}>
               <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-                   <div className="absolute top-10 left-10 text-9xl font-display text-pink-400 transform -rotate-12">R</div>
-                   <div className="absolute bottom-10 right-10 text-9xl font-display text-pink-400 transform rotate-12">K</div>
+                   <div className={`absolute top-10 left-10 text-9xl font-display transform -rotate-12 ${isAdmin ? 'text-purple-500' : 'text-pink-400'}`}>R</div>
+                   <div className={`absolute bottom-10 right-10 text-9xl font-display transform rotate-12 ${isAdmin ? 'text-purple-500' : 'text-pink-400'}`}>K</div>
               </div>
               
               <div className="text-center z-10 relative">
-                <h1 className="text-7xl md:text-9xl font-display text-pink-900 mb-4 tracking-tighter">
-                  Rose <span className="text-white text-stroke-pink">K.</span>
+                <h1 className={`text-7xl md:text-9xl font-display mb-4 tracking-tighter ${theme.titleColor}`}>
+                  Rose <span className={`text-white ${theme.textStroke}`}>K.</span>
                 </h1>
-                <p className="font-serif text-xl md:text-2xl text-gray-600 italic mb-12 tracking-widest">
-                  Modèle Photo & Muse
+                <p className={`font-serif text-xl md:text-2xl italic mb-12 tracking-widest ${isAdmin ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {isAdmin ? "L'autre facette." : "Modèle Photo & Muse"}
                 </p>
                 
                 <div className="animate-bounce mt-8">
-                  <svg className="w-6 h-6 text-pink-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`w-6 h-6 mx-auto ${isAdmin ? 'text-purple-400' : 'text-pink-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                   </svg>
                 </div>
               </div>
               
               {/* Decorative vertical lines */}
-              <div className="absolute left-1/4 top-0 bottom-0 w-px bg-white/50"></div>
-              <div className="absolute right-1/4 top-0 bottom-0 w-px bg-white/50"></div>
+              <div className="absolute left-1/4 top-0 bottom-0 w-px bg-white/10"></div>
+              <div className="absolute right-1/4 top-0 bottom-0 w-px bg-white/10"></div>
           </section>
 
-          {/* SECTION 2: GALLERY - Fond Blanc pur pour mettre en valeur les photos */}
-          <section id={Section.GALLERY} className="min-h-screen bg-white py-10 relative z-10">
+          {/* SECTION 2: GALLERY */}
+          <section id={Section.GALLERY} className={`min-h-screen py-10 relative z-10 transition-colors duration-700 ${theme.galleryBg}`}>
                <FilmStrip />
           </section>
 
-          {/* SECTION 3: ABOUT - Fond Blanc pur avec accent rose subtil */}
-          <section id={Section.ABOUT} className="min-h-screen flex items-center bg-white relative overflow-hidden">
-               {/* Background Blob - Adjusted specifically for white background */}
-               <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-pink-50 rounded-full mix-blend-multiply filter blur-3xl opacity-60 -translate-y-1/2 translate-x-1/3"></div>
+          {/* SECTION 3: ABOUT */}
+          <section id={Section.ABOUT} className={`min-h-screen flex items-center relative overflow-hidden transition-colors duration-700 ${theme.aboutBg}`}>
+               {/* Background Blob */}
+               <div className={`absolute top-0 right-0 w-[600px] h-[600px] rounded-full mix-blend-multiply filter blur-3xl opacity-60 -translate-y-1/2 translate-x-1/3 transition-colors duration-700 ${theme.blobColor}`}></div>
                
                <div className="max-w-6xl mx-auto py-20 px-8 flex flex-col md:flex-row items-center gap-20 relative z-10 pl-24">
                   <div className="w-full md:w-1/2 relative group">
-                       <div className="absolute inset-0 bg-pink-200 transform translate-x-4 translate-y-4 rounded-lg transition-transform group-hover:translate-x-6 group-hover:translate-y-6"></div>
+                       <div className={`absolute inset-0 transform translate-x-4 translate-y-4 rounded-lg transition-transform group-hover:translate-x-6 group-hover:translate-y-6 ${isAdmin ? 'bg-purple-900/50' : 'bg-pink-200'}`}></div>
                        <img 
                           src="https://i.imgur.com/QkaahV8.png" 
                           alt="Rose Portrait" 
-                          className="relative rounded-lg shadow-xl w-full grayscale group-hover:grayscale-0 transition-all duration-700 object-cover object-center h-[600px]" 
+                          className={`relative rounded-lg shadow-xl w-full grayscale group-hover:grayscale-0 transition-all duration-700 object-cover object-center h-[600px] ${isAdmin ? 'brightness-75 contrast-125' : ''}`} 
                        />
                   </div>
                   <div className="w-full md:w-1/2">
-                      <span className="text-pink-400 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Bio & Stats</span>
-                      <h2 className="text-6xl font-display text-pink-900 mb-8 leading-tight">Hello, moi c'est <br/><span className="text-pink-500 italic">Rose</span></h2>
-                      <p className="font-serif text-lg text-gray-600 leading-loose mb-10 text-justify">
-                           Passionnée par l'art de la photographie, je mets mon image au service de projets visuels comme les marques ou des projets purement artistique. Mon univers se teinte d'émotions fortes et de douceur. Je suis disponible pour vos projets éditoriaux, commerciaux et créatifs.
+                      <span className={`font-bold tracking-[0.3em] uppercase text-sm mb-4 block ${theme.textAccent}`}>{isAdmin ? "Confidentiel" : "Bio & Stats"}</span>
+                      <h2 className={`text-6xl font-display mb-8 leading-tight ${theme.titleColor}`}>{isAdmin ? "Dark" : "Hello, moi c'est"} <br/><span className={`${isAdmin ? 'text-purple-500' : 'text-pink-500'} italic`}>Rose</span></h2>
+                      <p className={`font-serif text-lg leading-loose mb-10 text-justify ${isAdmin ? 'text-gray-300' : 'text-gray-600'}`}>
+                           {isAdmin 
+                            ? "Ici résident les projets que la lumière du jour n'atteint pas. Une exploration de l'ombre, de l'anonymat et de l'esthétique brute. Cet espace est réservé aux collaborations exclusives et expérimentales." 
+                            : "Passionnée par l'art de la photographie, je mets mon image au service de projets visuels comme les marques ou des projets purement artistique. Mon univers se teinte d'émotions fortes et de douceur. Je suis disponible pour vos projets éditoriaux, commerciaux et créatifs."}
                       </p>
-                      <div className="grid grid-cols-2 gap-8 border-t border-pink-100 pt-8">
+                      <div className={`grid grid-cols-2 gap-8 border-t pt-8 ${isAdmin ? 'border-gray-800' : 'border-pink-100'}`}>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Âge</p>
-                              <p className="font-display text-2xl text-pink-900">23 ans</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Âge</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>23 ans</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Hauteur</p>
-                              <p className="font-display text-2xl text-pink-900">1m66</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Hauteur</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>1m66</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Poids</p>
-                              <p className="font-display text-2xl text-pink-900">56 kg</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Poids</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>56 kg</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Yeux</p>
-                              <p className="font-display text-2xl text-pink-900">Bleu clair</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Yeux</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>Bleu clair</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Cheveux</p>
-                              <p className="font-display text-2xl text-pink-900">Blanc</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Cheveux</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>Blanc</p>
                           </div>
                           <div>
-                              <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Origine</p>
-                              <p className="font-display text-2xl text-pink-900">Vice City, USA</p>
+                              <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Origine</p>
+                              <p className={`font-display text-2xl ${theme.titleColor}`}>Vice City, USA</p>
                           </div>
                       </div>
                   </div>
               </div>
           </section>
 
-          {/* SECTION 4: CONTACT - Dégradé Blanc vers Sweet Pink */}
-          <section id={Section.CONTACT} className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white via-pink-50 to-pink-200 relative">
-              <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(#ec4899 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-              <div className="z-10 w-full px-4">
-                  <ContactAI />
-              </div>
-              <footer className="absolute bottom-8 text-center w-full text-pink-900/60 text-xs font-serif italic">
-                  © 2025 Rose K. Portfolio - Fait avec amour et paillettes ✨
-              </footer>
-          </section>
+          {/* SECTION 4: CONTACT - VISIBLE ONLY IN PUBLIC MODE */}
+          {!isAdmin && (
+            <section id={Section.CONTACT} className={`min-h-screen flex flex-col items-center justify-center p-4 relative transition-colors duration-700 ${theme.contactGradient}`}>
+                <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `radial-gradient('#ec4899' 1px, transparent 1px)`, backgroundSize: '30px 30px' }}></div>
+                <div className="z-10 w-full px-4">
+                    <ContactAI />
+                </div>
+                <footer className="absolute bottom-8 text-center w-full text-xs font-serif italic text-pink-900/60">
+                    © 2025 Rose K. Portfolio - Fait avec amour et paillettes ✨
+                </footer>
+            </section>
+          )}
+
+          {/* SIMPLE FOOTER FOR ADMIN MODE (SINCE CONTACT SECTION IS HIDDEN) */}
+          {isAdmin && (
+             <footer className="py-8 text-center w-full text-xs font-serif italic text-gray-500 bg-slate-900">
+                © 2025 Rose K. Portfolio - Mode Parallèle Actif 🌑
+            </footer>
+          )}
 
         </main>
       </div>
+  );
+};
+
+function App() {
+  return (
+    <PortfolioProvider>
+       <AppContent />
     </PortfolioProvider>
   );
 }

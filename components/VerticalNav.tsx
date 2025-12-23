@@ -11,6 +11,11 @@ export const VerticalNav: React.FC = () => {
   
   const { login, isAdmin, logout } = usePortfolio();
 
+  // Définition des sections visibles selon le mode
+  const visibleSections = isAdmin 
+    ? [Section.HOME, Section.GALLERY, Section.ABOUT]
+    : [Section.HOME, Section.GALLERY, Section.ABOUT, Section.CONTACT];
+
   const scrollToSection = (sectionId: Section) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -20,8 +25,12 @@ export const VerticalNav: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = [Section.HOME, Section.GALLERY, Section.ABOUT, Section.CONTACT];
-      for (const section of sections) {
+      // Utilisation de la liste dynamique des sections pour le scroll spy
+      const sectionsToCheck = isAdmin 
+        ? [Section.HOME, Section.GALLERY, Section.ABOUT]
+        : [Section.HOME, Section.GALLERY, Section.ABOUT, Section.CONTACT];
+
+      for (const section of sectionsToCheck) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -35,19 +44,15 @@ export const VerticalNav: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isAdmin]); // Ajout de isAdmin aux dépendances pour mettre à jour le spy
 
   const handleSocialClick = (e: React.MouseEvent, link: typeof SOCIAL_LINKS[0]) => {
     // Si c'est l'icône Profil (Facebrowser), on gère le login admin
     if (link.platform === 'Facebrowser') {
       e.preventDefault();
       if (isAdmin) {
-        // Déjà connecté, on redirige ou on propose de déconnecter (ici on ouvre le lien normal)
-         if(window.confirm("Vous êtes connecté en Admin. Voulez-vous vous déconnecter ?")) {
-             logout();
-         } else {
-             window.open(link.url, '_blank');
-         }
+         // Déconnexion immédiate (retour vers le mode normal)
+         logout();
       } else {
         setShowLoginModal(true);
       }
@@ -60,39 +65,43 @@ export const VerticalNav: React.FC = () => {
       setShowLoginModal(false);
       setPassword('');
       setLoginError(false);
-      alert('Mode Administrateur activé ! ✨');
     } else {
       setLoginError(true);
     }
   };
 
+  // Styles dynamiques
+  const brandColor = isAdmin ? 'text-purple-500' : 'text-pink-500/90';
+  const adminBadge = isAdmin ? 'text-purple-300' : 'text-green-500';
+  const navActive = isAdmin ? 'text-purple-400 font-bold' : 'text-pink-600 font-bold';
+  const navInactive = isAdmin ? 'text-gray-500 hover:text-purple-300' : 'text-gray-400 hover:text-pink-400';
+  const lineActive = isAdmin ? 'bg-purple-500' : 'bg-pink-500';
+  
   return (
     <>
       <nav className="fixed left-0 top-0 h-screen w-48 flex flex-col justify-between pl-8 py-12 z-50 pointer-events-none">
         {/* Brand Initials */}
         <div 
-          className="font-display text-4xl text-pink-500/90 cursor-pointer pointer-events-auto mix-blend-multiply hover:scale-110 transition-transform origin-left" 
+          className={`font-display text-4xl cursor-pointer pointer-events-auto mix-blend-multiply hover:scale-110 transition-transform origin-left ${brandColor}`} 
           onClick={() => scrollToSection(Section.HOME)}
         >
           R.K
-          {isAdmin && <span className="text-xs text-green-500 block font-serif tracking-widest ml-1">ADMIN</span>}
+          {isAdmin && <span className={`text-xs block font-serif tracking-widest ml-1 ${adminBadge}`}>DARK</span>}
         </div>
 
         {/* Navigation Links - Horizontal Text in Vertical Layout */}
         <div className="flex flex-col gap-6 pointer-events-auto">
-          {[Section.HOME, Section.GALLERY, Section.ABOUT, Section.CONTACT].map((section) => (
+          {visibleSections.map((section) => (
             <button
               key={section}
               onClick={() => scrollToSection(section)}
               className="group flex items-center gap-3 focus:outline-none"
             >
               {/* Active Indicator Line */}
-              <div className={`h-px bg-pink-500 transition-all duration-300 ${activeSection === section ? 'w-8' : 'w-0 group-hover:w-4'}`} />
+              <div className={`h-px transition-all duration-300 ${lineActive} ${activeSection === section ? 'w-8' : 'w-0 group-hover:w-4'}`} />
               
               <span className={`text-xs uppercase tracking-[0.2em] transition-colors duration-300 text-left ${
-                activeSection === section 
-                  ? 'text-pink-600 font-bold' 
-                  : 'text-gray-400 hover:text-pink-400'
+                activeSection === section ? navActive : navInactive
               }`}>
                 {section === 'home' ? 'Accueil' : 
                  section === 'about' ? 'À Propos' :
@@ -114,13 +123,14 @@ export const VerticalNav: React.FC = () => {
                   href={link.url}
                   onClick={(e) => handleSocialClick(e, link)}
                   className={`transition-colors transform hover:-translate-y-1 
-                    ${isFacebrowserText ? 'text-red-500 hover:text-red-600' : 'text-gray-300 hover:text-pink-500'} 
-                    ${link.platform === 'Facebrowser' && isAdmin && !isFacebrowserText ? 'text-pink-500' : ''}`
+                    ${isFacebrowserText ? 'text-red-500 hover:text-red-600' : (isAdmin ? 'text-gray-600 hover:text-purple-500' : 'text-gray-300 hover:text-pink-500')} 
+                    ${link.platform === 'Facebrowser' && isAdmin && !isFacebrowserText ? 'text-purple-500' : ''}`
                   }
                 >
                   <span className={`text-[10px] font-bold border rounded-full h-8 flex items-center justify-center transition-all
-                      ${isFacebrowserText ? 'w-auto px-3 border-red-200 bg-red-50' : 'w-8 border-pink-200 hover:bg-pink-50'}
-                      ${!isFacebrowserText && link.platform === 'Facebrowser' && isAdmin ? 'border-pink-500 bg-pink-50' : ''}
+                      ${isFacebrowserText ? 'w-auto px-3 border-red-200 bg-red-50' : 'w-8'}
+                      ${!isFacebrowserText && isAdmin ? 'border-gray-700 bg-slate-900 hover:border-purple-500' : 'border-pink-200 hover:bg-pink-50'}
+                      ${!isFacebrowserText && link.platform === 'Facebrowser' && isAdmin ? 'border-purple-500 bg-purple-900/20' : ''}
                   `}>
                       {link.icon}
                   </span>
@@ -132,7 +142,7 @@ export const VerticalNav: React.FC = () => {
 
       {/* Modal Login Admin */}
       {showLoginModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-pink-900/20 backdrop-blur-sm p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full border border-pink-100">
             <h3 className="font-display text-2xl text-pink-900 mb-4 text-center">Espace Privé</h3>
             <form onSubmit={handleLoginSubmit}>
@@ -145,7 +155,7 @@ export const VerticalNav: React.FC = () => {
                   className="w-full px-4 py-2 bg-pink-50 border border-pink-100 rounded-lg focus:ring-2 focus:ring-pink-300 outline-none text-center font-serif text-sm"
                   autoFocus
                 />
-                {loginError && <p className="text-red-400 text-xs text-center mt-2 italic">Mot de passe incorrect</p>}
+                {loginError && <p className="text-red-400 text-xs text-center mt-2 italic">Accès refusé.</p>}
               </div>
               <div className="flex gap-2">
                 <button 
@@ -162,7 +172,6 @@ export const VerticalNav: React.FC = () => {
                   Entrer
                 </button>
               </div>
-              {/* Lien discret pour l'accès normal si l'utilisateur n'est pas admin mais a cliqué par erreur */}
               <div className="mt-4 text-center border-t border-gray-100 pt-2">
                  <a href={SOCIAL_LINKS.find(l => l.platform === 'Facebrowser')?.url} target="_blank" rel="noreferrer" className="text-[10px] text-gray-300 hover:text-gray-500 uppercase">
                     Accéder au profil public

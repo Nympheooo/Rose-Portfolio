@@ -35,6 +35,21 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
   }
 ];
 
+export const SECRET_PORTFOLIO_ITEMS: PhotoItem[] = [
+  {
+    id: 101,
+    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop", 
+    gallery: [
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop"
+    ],
+    title: "Shadow Work",
+    category: "Artistique & Sombre",
+    description: "Exploration des contrastes et de l'anonymat. Une série réalisée dans les sous-sols industriels de Los Santos.",
+    rotation: 3
+  }
+];
+
 export const SOCIAL_LINKS: SocialLink[] = [
   { 
     platform: "FacebrowserID", 
