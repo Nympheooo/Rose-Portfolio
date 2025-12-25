@@ -38,14 +38,17 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
 export const SECRET_PORTFOLIO_ITEMS: PhotoItem[] = [
   {
     id: 101,
-    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop", 
+    url: "https://i.imgur.com/cPNbUm1.png", 
     gallery: [
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop"
+        "https://img1.pixhost.to/images/11150/674238082_c6107657-e23e-4f71-bf4c-84b697b6999c.png",
+        "https://img1.pixhost.to/images/11150/674238242_fc48dbde-95b4-41bd-9f38-b283b4e8c459.png",
+        "https://img1.pixhost.to/images/11150/674238235_97d7e874-6ef6-4bb7-8f28-eb6850db7a1d.png",
+        "https://img1.pixhost.to/images/11150/674238236_73603504-3c21-4296-8680-08984f80b8c2.png",
+        "https://img1.pixhost.to/images/11150/674238237_bf6a7a31-5086-4a8a-80ef-d7eff29cd74c1.png"
     ],
-    title: "Shadow Work",
-    category: "Artistique & Sombre",
-    description: "Exploration des contrastes et de l'anonymat. Une série réalisée dans les sous-sols industriels de Los Santos.",
+    title: "Noël 2025",
+    category: "Shooting privé",
+    description: "Un petit shooting cadeau pour noël !",
     rotation: 3
   }
 ];

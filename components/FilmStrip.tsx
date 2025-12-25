@@ -6,7 +6,6 @@ import { usePortfolio } from '../context/PortfolioContext';
 export const FilmStrip: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<PhotoItem | null>(null);
   const [selectedYear, setSelectedYear] = useState<'2025' | '2026'>('2025');
-  const [newImageUrl, setNewImageUrl] = useState('');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   
   // États pour le Gestionnaire de Dashboard
@@ -16,65 +15,7 @@ export const FilmStrip: React.FC = () => {
   const [quickTitle, setQuickTitle] = useState('');
   const [quickCategory, setQuickCategory] = useState('');
 
-  const { items, isAdmin, updateCoverImage, addPhotoToGallery, deletePhotoFromGallery, reorderGalleryPhoto, createGallery, deleteGallery, updateGalleryDetails, reorderGalleries } = usePortfolio();
-
-  // Fonction pour définir une image comme couverture via l'étoile
-  const handleSetCover = (e: React.MouseEvent, imgUrl: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (selectedItem) {
-        updateCoverImage(selectedItem.id, imgUrl);
-        // Mise à jour immédiate de l'interface locale
-        setSelectedItem(prev => prev ? { ...prev, url: imgUrl } : null);
-    }
-  };
-
-  const handleAddPhoto = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedItem && newImageUrl) {
-      addPhotoToGallery(selectedItem.id, newImageUrl);
-      setSelectedItem(prev => prev ? { ...prev, gallery: [newImageUrl, ...prev.gallery] } : null);
-      setNewImageUrl('');
-    }
-  };
-
-  const handleDeletePhoto = (e: React.MouseEvent, idx: number) => {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      if(window.confirm("Supprimer cette photo ?") && selectedItem) {
-          deletePhotoFromGallery(selectedItem.id, idx);
-           setSelectedItem(prev => {
-               if(!prev) return null;
-               const newG = [...prev.gallery];
-               newG.splice(idx, 1);
-               return {...prev, gallery: newG};
-           });
-      }
-  }
-
-  const handleMovePhoto = (e: React.MouseEvent, idx: number, direction: 'left' | 'right') => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (!selectedItem) return;
-
-      const newIndex = direction === 'left' ? idx - 1 : idx + 1;
-      
-      if (newIndex < 0 || newIndex >= selectedItem.gallery.length) return;
-
-      reorderGalleryPhoto(selectedItem.id, idx, newIndex);
-
-      setSelectedItem(prev => {
-          if (!prev) return null;
-          const newG = [...prev.gallery];
-          const element = newG[idx];
-          newG.splice(idx, 1);
-          newG.splice(newIndex, 0, element);
-          return { ...prev, gallery: newG };
-      });
-  };
+  const { items, isAdmin, createGallery, deleteGallery, updateGalleryDetails, reorderGalleries } = usePortfolio();
 
   const handleDashboardDelete = (e: React.MouseEvent, id: number, title: string) => {
       e.preventDefault();
@@ -391,22 +332,6 @@ export const FilmStrip: React.FC = () => {
                             </p>
                         </div>
 
-                        {/* Admin Add Photo */}
-                        {isAdmin && (
-                            <form onSubmit={handleAddPhoto} className="mb-12 p-6 bg-slate-900 rounded-xl border border-slate-700 flex gap-4 max-w-3xl mx-auto shadow-sm">
-                                <input 
-                                    type="text" 
-                                    value={newImageUrl} 
-                                    onChange={e => setNewImageUrl(e.target.value)}
-                                    placeholder="URL de la nouvelle photo..."
-                                    className="flex-1 px-5 py-3 border rounded-lg border-slate-700 bg-slate-800 text-white focus:outline-none focus:border-purple-500 font-sans"
-                                />
-                                <button type="submit" className="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-500 uppercase text-xs tracking-widest transition-transform hover:scale-105">
-                                    Ajouter
-                                </button>
-                            </form>
-                        )}
-
                         {/* Masonry Layout for Dynamic Images */}
                         <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
                             
@@ -417,71 +342,12 @@ export const FilmStrip: React.FC = () => {
                                     className="break-inside-avoid relative group cursor-zoom-in"
                                     onClick={() => setLightboxImage(img)}
                                 >
-                                    {/* Bordure dorée si c'est la couverture */}
-                                    {selectedItem.url === img && (
-                                        <div className="absolute inset-0 border-4 border-yellow-400/70 z-10 pointer-events-none"></div>
-                                    )}
-
                                     <img 
                                         src={img} 
                                         className={`w-full h-auto object-cover transition-all duration-700 group-hover:opacity-95 shadow-sm hover:shadow-xl ${isAdmin ? 'grayscale-[30%] hover:grayscale-0' : ''}`} 
                                         alt={`Gallery ${idx}`}
                                         loading="lazy" 
                                     />
-                                    
-                                    {/* ADMIN ACTIONS OVERLAY */}
-                                    {isAdmin && (
-                                        <div className="absolute inset-x-0 bottom-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-between p-3 z-20">
-                                            
-                                            <div className="flex gap-2 items-center">
-                                                {/* Bouton Star / Cover */}
-                                                <button
-                                                    onClick={(e) => handleSetCover(e, img)}
-                                                    className={`p-2 rounded-full transition-colors ${selectedItem.url === img ? 'text-yellow-400 bg-white/10' : 'text-gray-400 hover:text-yellow-400 hover:bg-white/20'}`}
-                                                    title={selectedItem.url === img ? "C'est la couverture actuelle" : "Définir comme couverture"}
-                                                >
-                                                    {selectedItem.url === img ? (
-                                                         <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                                                    ) : (
-                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                                                    )}
-                                                </button>
-
-                                                <div className="w-px h-5 bg-gray-600 mx-1"></div>
-
-                                                {/* Move Left/Up */}
-                                                {idx > 0 && (
-                                                    <button 
-                                                        onClick={(e) => handleMovePhoto(e, idx, 'left')}
-                                                        className="p-2 text-white hover:text-purple-400 hover:bg-white/20 rounded-full transition-colors"
-                                                        title="Déplacer avant"
-                                                    >
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
-                                                    </button>
-                                                )}
-
-                                                {/* Move Right/Down */}
-                                                {idx < selectedItem.gallery.length - 1 && (
-                                                    <button 
-                                                        onClick={(e) => handleMovePhoto(e, idx, 'right')}
-                                                        className="p-2 text-white hover:text-purple-400 hover:bg-white/20 rounded-full transition-colors"
-                                                        title="Déplacer après"
-                                                    >
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            {/* Delete Button */}
-                                            <button 
-                                                onClick={(e) => handleDeletePhoto(e, idx)}
-                                                className="p-2 text-red-400 hover:text-red-500 hover:bg-white/20 rounded-full transition-colors"
-                                                title="Supprimer"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                            </button>
-                                        </div>
-                                    )}
                                 </div>
                             ))}
                         </div>

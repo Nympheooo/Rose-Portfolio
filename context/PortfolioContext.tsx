@@ -6,7 +6,8 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 
 // Clés de stockage
 const STORAGE_KEY_PUBLIC = 'portfolio_data_v19';
-const STORAGE_KEY_SECRET = 'portfolio_secret_data_v1';
+// Changement de version pour forcer le rechargement des nouvelles images secrètes
+const STORAGE_KEY_SECRET = 'portfolio_secret_data_v5';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
