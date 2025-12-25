@@ -40,6 +40,7 @@ export const SECRET_PORTFOLIO_ITEMS: PhotoItem[] = [
     id: 101,
     url: "https://i.imgur.com/cPNbUm1.png", 
     gallery: [
+        "https://img1.pixhost.to/images/11151/674255370_9890cd9d-b78f-4522-ac38-83e5a000fdc4.png",
         "https://img1.pixhost.to/images/11150/674238082_c6107657-e23e-4f71-bf4c-84b697b6999c.png",
         "https://img1.pixhost.to/images/11150/674238242_fc48dbde-95b4-41bd-9f38-b283b4e8c459.png",
         "https://img1.pixhost.to/images/11150/674238235_97d7e874-6ef6-4bb7-8f28-eb6850db7a1d.png",
