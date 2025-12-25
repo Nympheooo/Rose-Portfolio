@@ -86,7 +86,7 @@ export const VerticalNav: React.FC = () => {
           onClick={() => scrollToSection(Section.HOME)}
         >
           R.K
-          {isAdmin && <span className={`text-xs block font-serif tracking-widest ml-1 ${adminBadge}`}>DARK</span>}
+          {isAdmin && <span className={`text-xs block font-serif tracking-widest ml-1 ${adminBadge}`}>Rose</span>}
         </div>
 
         {/* Navigation Links - Horizontal Text in Vertical Layout */}

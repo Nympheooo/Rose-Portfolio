@@ -115,7 +115,12 @@ const AppContent = () => {
                   </div>
                   <div className="w-full md:w-1/2">
                       <span className={`font-bold tracking-[0.3em] uppercase text-sm mb-4 block ${theme.textAccent}`}>{isAdmin ? "Confidentiel" : "Bio & Stats"}</span>
-                      <h2 className={`text-6xl font-display mb-8 leading-tight ${theme.titleColor}`}>{isAdmin ? "Dark" : "Hello, moi c'est"} <br/><span className={`${isAdmin ? 'text-purple-500' : 'text-pink-500'} italic`}>Rose</span></h2>
+                      <h2 className={`text-6xl font-display mb-8 leading-tight ${theme.titleColor}`}>
+                          {isAdmin ? "Rose," : "Hello, moi c'est"} <br/>
+                          <span className={`${isAdmin ? 'text-purple-500' : 'text-pink-500'} italic`}>
+                              {isAdmin ? "NotAnAngel" : "Rose"}
+                          </span>
+                      </h2>
                       <p className={`font-serif text-lg leading-loose mb-10 text-justify ${isAdmin ? 'text-gray-300' : 'text-gray-600'}`}>
                            {isAdmin 
                             ? "Ici résident les projets que la lumière du jour n'atteint pas. Une exploration de l'ombre, de l'anonymat et de l'esthétique brute. Cet espace est réservé aux collaborations exclusives et expérimentales." 
