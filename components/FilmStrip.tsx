@@ -58,7 +58,7 @@ export const FilmStrip: React.FC = () => {
   // Vérification du PIN
   const handlePinSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      if (pinInput === "8624") {
+      if (pinInput === "1612") {
           setSelectedItem(pendingItem);
           setShowPinModal(false);
           setPendingItem(null);
