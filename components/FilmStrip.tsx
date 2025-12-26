@@ -15,6 +15,12 @@ export const FilmStrip: React.FC = () => {
   const [quickTitle, setQuickTitle] = useState('');
   const [quickCategory, setQuickCategory] = useState('');
 
+  // États pour la protection PIN
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [pendingItem, setPendingItem] = useState<PhotoItem | null>(null);
+  const [pinInput, setPinInput] = useState('');
+  const [pinError, setPinError] = useState(false);
+
   const { items, isAdmin, createGallery, deleteGallery, updateGalleryDetails, reorderGalleries } = usePortfolio();
 
   const handleDashboardDelete = (e: React.MouseEvent, id: number, title: string) => {
@@ -33,6 +39,33 @@ export const FilmStrip: React.FC = () => {
           createGallery(quickTitle, quickCategory, "Description à venir...");
           setQuickTitle('');
           setQuickCategory('');
+      }
+  };
+
+  // Gestion du clic sur une carte (Check PIN)
+  const handleCardClick = (item: PhotoItem) => {
+    // Protection spécifique pour Noël 2025
+    if (item.title === "Noël 2025") {
+        setPendingItem(item);
+        setPinInput('');
+        setPinError(false);
+        setShowPinModal(true);
+    } else {
+        setSelectedItem(item);
+    }
+  };
+
+  // Vérification du PIN
+  const handlePinSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (pinInput === "8624") {
+          setSelectedItem(pendingItem);
+          setShowPinModal(false);
+          setPendingItem(null);
+          setPinInput('');
+      } else {
+          setPinError(true);
+          setPinInput('');
       }
   };
 
@@ -94,11 +127,18 @@ export const FilmStrip: React.FC = () => {
                         {/* 2. CARTE POLAROID (Zone cliquable pour ouvrir) */}
                         <div 
                             className={`${cardBg} p-4 pb-8 shadow-xl w-72 md:w-[26rem] hover:shadow-2xl border flex flex-col relative cursor-pointer transition-colors duration-500`}
-                            onClick={() => setSelectedItem(item)}
+                            onClick={() => handleCardClick(item)}
                         >
                             {/* Tape Effect */}
                             <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-8 ${tapeColor} rotate-1 shadow-sm z-10 opacity-90 pointer-events-none`} />
                             
+                            {/* Icone de verrouillage si c'est Noël 2025 */}
+                            {item.title === "Noël 2025" && (
+                                <div className="absolute top-2 right-2 z-20 bg-white/80 rounded-full p-1.5 shadow-sm text-gray-500">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </div>
+                            )}
+
                             {/* Image Container */}
                             <div className="relative overflow-hidden bg-gray-100 aspect-[3/4] mb-4 pointer-events-none">
                                 <img 
@@ -122,7 +162,7 @@ export const FilmStrip: React.FC = () => {
                     } ${isAdmin ? 'bg-slate-800/95 text-gray-300' : 'bg-white/95 text-gray-600'}`}>
                         <p className="text-sm font-serif italic mb-3">"{item.description}"</p>
                         <div className={`flex items-center text-xs font-bold uppercase tracking-wider ${isAdmin ? 'text-purple-400' : 'text-pink-400'}`}>
-                            <span>Voir la galerie</span>
+                            <span>{item.title === "Noël 2025" ? "Accès sécurisé" : "Voir la galerie"}</span>
                             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </div>
                     </div>
@@ -276,6 +316,51 @@ export const FilmStrip: React.FC = () => {
              </div>
         </div>,
         document.body
+      )}
+
+      {/* PIN PROTECTION MODAL - PORTAL */}
+      {showPinModal && createPortal(
+          <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in">
+              <div className={`p-8 rounded-2xl shadow-2xl max-w-sm w-full border text-center relative ${isAdmin ? 'bg-slate-800 border-purple-900' : 'bg-white border-pink-100'}`}>
+                  <button 
+                      onClick={() => { setShowPinModal(false); setPinInput(''); }}
+                      className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </button>
+
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${isAdmin ? 'bg-purple-900/50 text-purple-400' : 'bg-pink-50 text-pink-400'}`}>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                  </div>
+                  
+                  <h3 className={`font-display text-2xl mb-2 ${isAdmin ? 'text-white' : 'text-pink-900'}`}>Accès Restreint</h3>
+                  <p className={`text-xs uppercase tracking-widest mb-6 ${isAdmin ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Entrez le code PIN pour voir "{pendingItem?.title}"
+                  </p>
+
+                  <form onSubmit={handlePinSubmit}>
+                      <input 
+                          type="password"
+                          inputMode="numeric" 
+                          maxLength={4}
+                          value={pinInput}
+                          onChange={(e) => setPinInput(e.target.value)}
+                          placeholder="••••"
+                          className={`w-32 mx-auto px-4 py-3 text-center text-2xl tracking-[0.5em] border rounded-lg focus:outline-none mb-4 block font-display transition-colors ${isAdmin ? 'bg-slate-900 border-slate-700 text-white focus:border-purple-500' : 'bg-gray-50 border-gray-200 text-gray-800 focus:border-pink-300'}`}
+                          autoFocus
+                      />
+                      {pinError && <p className="text-red-500 text-xs font-bold mb-4 animate-bounce">Code incorrect</p>}
+                      
+                      <button 
+                          type="submit"
+                          className={`w-full py-2 rounded-lg font-bold text-xs uppercase tracking-widest text-white transition-all transform active:scale-95 ${isAdmin ? 'bg-purple-600 hover:bg-purple-500' : 'bg-pink-500 hover:bg-pink-600'}`}
+                      >
+                          Déverrouiller
+                      </button>
+                  </form>
+              </div>
+          </div>,
+          document.body
       )}
 
       {/* Dynamic Gallery Modal (Single Gallery View) - PORTAL */}
