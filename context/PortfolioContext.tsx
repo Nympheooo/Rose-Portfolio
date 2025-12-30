@@ -5,7 +5,7 @@ import { PORTFOLIO_ITEMS, SECRET_PORTFOLIO_ITEMS } from '../constants';
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 // Clés de stockage
-const STORAGE_KEY_PUBLIC = 'portfolio_data_v19';
+const STORAGE_KEY_PUBLIC = 'portfolio_data_v22';
 // Changement de version pour forcer le rechargement des nouvelles images secrètes
 const STORAGE_KEY_SECRET = 'portfolio_secret_data_v6';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";

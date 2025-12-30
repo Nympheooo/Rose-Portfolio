@@ -32,6 +32,20 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
     category: "Maillots de bain",
     description: "Clichés réalisé pour la marque de maillots de bain \"Ocean Drive\" à Vice City.",
     rotation: 1
+  },
+  {
+    id: 3,
+    url: "https://i.imgur.com/nuaTpI3.png",
+    gallery: [
+        "https://i.imgur.com/aRnzJsL.png",
+        "https://i.imgur.com/6vM0Uzt.png",
+        "https://i.imgur.com/uKyST0u.png",
+        "https://i.imgur.com/puHS29S.png"
+    ],
+    title: "Perseus",
+    category: "Bijouterie, maroquinerie",
+    description: "Perseus est une enseigne spécialisée dans la maroquinerie et la vente de bijoux de luxe pour une clientèle raffinée",
+    rotation: 2
   }
 ];
 
