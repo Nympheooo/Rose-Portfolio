@@ -80,7 +80,7 @@ const AppContent = () => {
         <VerticalNav />
 
         {/* Main Content - Full Width stacked sections */}
-        <main className="w-full relative">
+        <main className="w-full relative animate-in fade-in duration-700">
           
           {/* SECTION 1: HOME */}
           <section id={Section.HOME} className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-colors duration-700 ${theme.homeGradient}`}>
@@ -134,7 +134,9 @@ const AppContent = () => {
                                     <img 
                                         src="https://i.imgur.com/QkaahV8.png" 
                                         alt="Rose Portrait" 
-                                        className={`relative rounded-lg shadow-xl w-full h-full object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700 ${isAdmin ? 'brightness-75 contrast-125' : ''}`} 
+                                        draggable={false}
+                                        onContextMenu={(e) => e.preventDefault()}
+                                        className={`relative rounded-lg shadow-xl w-full h-full object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700 select-none pointer-events-none ${isAdmin ? 'brightness-75 contrast-125' : ''}`} 
                                     />
                                 </div>
 

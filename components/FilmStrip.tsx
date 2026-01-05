@@ -128,6 +128,7 @@ export const FilmStrip: React.FC = () => {
                         <div 
                             className={`${cardBg} p-4 pb-8 shadow-xl w-72 md:w-[26rem] hover:shadow-2xl border flex flex-col relative cursor-pointer transition-colors duration-500`}
                             onClick={() => handleCardClick(item)}
+                            onContextMenu={(e) => e.preventDefault()}
                         >
                             {/* Tape Effect */}
                             <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-8 ${tapeColor} rotate-1 shadow-sm z-10 opacity-90 pointer-events-none`} />
@@ -140,11 +141,12 @@ export const FilmStrip: React.FC = () => {
                             )}
 
                             {/* Image Container */}
-                            <div className="relative overflow-hidden bg-gray-100 aspect-[3/4] mb-4 pointer-events-none">
+                            <div className="relative overflow-hidden bg-gray-100 aspect-[3/4] mb-4 pointer-events-none select-none">
                                 <img 
                                     src={item.url} 
                                     alt={item.title} 
-                                    className={`w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 ${isAdmin ? 'contrast-125 brightness-90' : ''}`}
+                                    draggable={false}
+                                    className={`w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 select-none ${isAdmin ? 'contrast-125 brightness-90' : ''}`}
                                 />
                             </div>
                             
@@ -413,12 +415,14 @@ export const FilmStrip: React.FC = () => {
                                     key={idx} 
                                     className="break-inside-avoid relative group cursor-zoom-in"
                                     onClick={() => setLightboxImage(img)}
+                                    onContextMenu={(e) => e.preventDefault()}
                                 >
                                     <img 
                                         src={img} 
-                                        className={`w-full h-auto object-cover transition-all duration-700 group-hover:opacity-95 shadow-sm hover:shadow-xl ${isAdmin ? 'grayscale-[30%] hover:grayscale-0' : ''}`} 
+                                        className={`w-full h-auto object-cover transition-all duration-700 group-hover:opacity-95 shadow-sm hover:shadow-xl select-none pointer-events-none ${isAdmin ? 'grayscale-[30%] hover:grayscale-0' : ''}`} 
                                         alt={`Gallery ${idx}`}
                                         loading="lazy" 
+                                        draggable={false}
                                     />
                                 </div>
                             ))}
@@ -451,8 +455,10 @@ export const FilmStrip: React.FC = () => {
             <img 
                 src={lightboxImage} 
                 alt="Full size" 
-                className="max-w-full max-h-[90vh] object-contain shadow-2xl animate-in zoom-in-95 duration-300"
+                className="max-w-full max-h-[90vh] object-contain shadow-2xl animate-in zoom-in-95 duration-300 select-none"
                 onClick={(e) => e.stopPropagation()} 
+                onContextMenu={(e) => e.preventDefault()}
+                draggable={false}
             />
         </div>,
         document.body
