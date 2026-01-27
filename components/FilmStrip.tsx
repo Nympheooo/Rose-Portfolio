@@ -23,6 +23,9 @@ export const FilmStrip: React.FC = () => {
 
   const { items, isAdmin, createGallery, deleteGallery, updateGalleryDetails, reorderGalleries } = usePortfolio();
 
+  // Filtrage des items par année (défaut '2025' si non spécifié)
+  const filteredItems = items.filter(item => (item.year || '2025') === selectedYear);
+
   const handleDashboardDelete = (e: React.MouseEvent, id: number, title: string) => {
       e.preventDefault();
       e.stopPropagation();
@@ -42,10 +45,15 @@ export const FilmStrip: React.FC = () => {
       }
   };
 
+  // Liste des albums protégés
+  const isProtected = (title: string) => {
+    return title === "Noël 2025" || title === "Premier Bouquet de Rose.";
+  };
+
   // Gestion du clic sur une carte (Check PIN)
   const handleCardClick = (item: PhotoItem) => {
-    // Protection spécifique pour Noël 2025
-    if (item.title === "Noël 2025") {
+    // Protection par PIN si nécessaire
+    if (isProtected(item.title)) {
         setPendingItem(item);
         setPinInput('');
         setPinError(false);
@@ -105,12 +113,12 @@ export const FilmStrip: React.FC = () => {
         </div>
       </div>
       
-      {selectedYear === '2025' ? (
+      {filteredItems.length > 0 ? (
         <div className="relative flex flex-col gap-24 pb-20 animate-in fade-in slide-in-from-bottom-8 duration-700">
             {/* Central decorative line */}
             <div className={`absolute top-10 bottom-10 left-1/2 w-px -z-10 transform -translate-x-1/2 hidden md:block ${isAdmin ? 'bg-purple-900/50' : 'bg-pink-200'}`} />
 
-            {items.map((item: PhotoItem, index: number) => (
+            {filteredItems.map((item: PhotoItem, index: number) => (
             <div 
                 key={item.id}
                 className={`flex w-full ${
@@ -133,8 +141,8 @@ export const FilmStrip: React.FC = () => {
                             {/* Tape Effect */}
                             <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-8 ${tapeColor} rotate-1 shadow-sm z-10 opacity-90 pointer-events-none`} />
                             
-                            {/* Icone de verrouillage si c'est Noël 2025 */}
-                            {item.title === "Noël 2025" && (
+                            {/* Icone de verrouillage si protégé */}
+                            {isProtected(item.title) && (
                                 <div className="absolute top-2 right-2 z-20 bg-white/80 rounded-full p-1.5 shadow-sm text-gray-500">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                 </div>
@@ -164,7 +172,7 @@ export const FilmStrip: React.FC = () => {
                     } ${isAdmin ? 'bg-slate-800/95 text-gray-300' : 'bg-white/95 text-gray-600'}`}>
                         <p className="text-sm font-serif italic mb-3">"{item.description}"</p>
                         <div className={`flex items-center text-xs font-bold uppercase tracking-wider ${isAdmin ? 'text-purple-400' : 'text-pink-400'}`}>
-                            <span>{item.title === "Noël 2025" ? "Accès sécurisé" : "Voir la galerie"}</span>
+                            <span>{isProtected(item.title) ? "Accès sécurisé" : "Voir la galerie"}</span>
                             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 // Clés de stockage
 const STORAGE_KEY_PUBLIC = 'portfolio_data_v22';
 // Changement de version pour forcer le rechargement des nouvelles images secrètes
-const STORAGE_KEY_SECRET = 'portfolio_secret_data_v6';
+const STORAGE_KEY_SECRET = 'portfolio_secret_data_v10';
 const PLACEHOLDER_COVER = "https://placehold.co/600x800/FFF0F5/EC4899?text=New+Cover";
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -121,7 +121,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           description,
           url: PLACEHOLDER_COVER,
           gallery: [],
-          rotation: randomRotation
+          rotation: randomRotation,
+          year: '2025' // Par défaut
         };
         return [...prev, newItem];
     });

@@ -8,6 +8,7 @@ export interface PhotoItem {
   category: string;
   description: string;
   rotation: number;
+  year?: string;
 }
 
 export enum Section {

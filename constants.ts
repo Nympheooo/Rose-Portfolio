@@ -16,7 +16,8 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
     title: "Bigness",
     category: "Streetwear",
     description: "Clichés promotionnels d'une nouvelle collection pour la marque streetwear BIGNESS. Le shooting a eu lieu dans les rues de Liberty City",
-    rotation: -2
+    rotation: -2,
+    year: '2025'
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
     title: "Ocean Drive",
     category: "Maillots de bain",
     description: "Clichés réalisé pour la marque de maillots de bain \"Ocean Drive\" à Vice City.",
-    rotation: 1
+    rotation: 1,
+    year: '2025'
   },
   {
     id: 3,
@@ -45,7 +47,8 @@ export const PORTFOLIO_ITEMS: PhotoItem[] = [
     title: "Perseus",
     category: "Bijouterie, maroquinerie",
     description: "Perseus est une enseigne spécialisée dans la maroquinerie et la vente de bijoux de luxe pour une clientèle raffinée",
-    rotation: 2
+    rotation: 2,
+    year: '2025'
   }
 ];
 
@@ -64,7 +67,22 @@ export const SECRET_PORTFOLIO_ITEMS: PhotoItem[] = [
     title: "Noël 2025",
     category: "Shooting privé",
     description: "Un petit shooting cadeau pour noël !",
-    rotation: 3
+    rotation: 3,
+    year: '2025'
+  },
+  {
+    id: 102,
+    url: "https://i.imgur.com/VdEzIrK.png",
+    gallery: [
+        "https://img2.pixhost.to/images/5333/689120907_34ff90b6-0caa-4914-afee-3d538c6cc855.png",
+        "https://img2.pixhost.to/images/5333/689121048_974c30ab-b40d-4be7-a8c7-1f5fffda274c.png",
+        "https://img2.pixhost.to/images/5333/689121047_001.png"
+    ],
+    title: "Premier Bouquet de Rose.",
+    category: "Intime",
+    description: "Collection exclusive 2026.",
+    rotation: -1,
+    year: '2026'
   }
 ];
 
