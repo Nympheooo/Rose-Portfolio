@@ -423,15 +423,22 @@ export const FilmStrip: React.FC = () => {
                                     key={idx} 
                                     className="break-inside-avoid relative group cursor-zoom-in"
                                     onClick={() => setLightboxImage(img)}
-                                    onContextMenu={(e) => e.preventDefault()}
+                                    onContextMenu={(e) => !isAdmin && e.preventDefault()}
                                 >
                                     <img 
                                         src={img} 
-                                        className={`w-full h-auto object-cover transition-all duration-700 group-hover:opacity-95 shadow-sm hover:shadow-xl select-none pointer-events-none ${isAdmin ? 'grayscale-[30%] hover:grayscale-0' : ''}`} 
+                                        className={`w-full h-full object-cover transition-all duration-700 group-hover:opacity-95 shadow-sm hover:shadow-xl ${isAdmin ? 'grayscale-[30%] hover:grayscale-0' : 'select-none pointer-events-none'}`} 
                                         alt={`Gallery ${idx}`}
                                         loading="lazy" 
-                                        draggable={false}
+                                        draggable={isAdmin}
                                     />
+                                    {isAdmin && (
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                            <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/20">
+                                                Clic droit pour sauver
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -456,17 +463,33 @@ export const FilmStrip: React.FC = () => {
         >
             <button 
                 onClick={() => setLightboxImage(null)}
-                className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
+                className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full z-50"
             >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
+            
+            {/* Download Button for Admin/Private Mode */}
+            {isAdmin && (
+                 <a 
+                    href={lightboxImage} 
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-6 left-6 text-white/50 hover:text-white transition-colors p-3 hover:bg-white/10 rounded-full flex items-center gap-2 z-50 group"
+                    onClick={(e) => e.stopPropagation()}
+                 >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span className="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-2 group-hover:translate-x-0">Enregistrer</span>
+                 </a>
+            )}
+
             <img 
                 src={lightboxImage} 
                 alt="Full size" 
-                className="max-w-full max-h-[90vh] object-contain shadow-2xl animate-in zoom-in-95 duration-300 select-none"
+                className={`max-w-full max-h-[90vh] object-contain shadow-2xl animate-in zoom-in-95 duration-300 ${isAdmin ? '' : 'select-none'}`}
                 onClick={(e) => e.stopPropagation()} 
-                onContextMenu={(e) => e.preventDefault()}
-                draggable={false}
+                onContextMenu={(e) => !isAdmin && e.preventDefault()}
+                draggable={isAdmin}
             />
         </div>,
         document.body
